@@ -318,11 +318,11 @@ server {
 }
 ```
 
-Set ORDS to trust the forwarded-proto header:
+Tell ORDS which forwarded header indicates the original client request was HTTPS:
 
 ```shell
 ords --config /opt/oracle/ords/config config set \
-  security.forceHTTPS true
+  security.httpsHeaderCheck "X-Forwarded-Proto: https"
 ```
 
 ---

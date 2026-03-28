@@ -12,16 +12,15 @@ This guide covers ORDS-specific security controls, complementing Oracle Database
 
 Never expose ORDS over plain HTTP in any non-development environment. Configure ORDS to refuse or redirect HTTP requests.
 
-### Force HTTPS in ORDS Configuration
+### Reverse Proxy HTTPS Header Handling
 
 ```shell
-# Require HTTPS for all requests
-ords --config /opt/oracle/ords/config config set security.forceHTTPS true
+# Tell ORDS the original client request arrived over HTTPS at the proxy
+ords --config /opt/oracle/ords/config config set \
+  security.httpsHeaderCheck "X-Forwarded-Proto: https"
 ```
 
-When `security.forceHTTPS = true`, ORDS:
-- Redirects HTTP requests to HTTPS (301)
-- Adds `Strict-Transport-Security` header to responses
+Use this when TLS is terminated at Nginx, Apache HTTPD, a load balancer, or another reverse proxy that forwards requests to ORDS over HTTP. Configure HTTP-to-HTTPS redirects and `Strict-Transport-Security` at the reverse proxy layer.
 
 ### HTTPS with ORDS Standalone (Production Certificate)
 
